@@ -1,5 +1,7 @@
 using System;
+using Examine;
 using Newtonsoft.Json.Linq;
+using Our.Umbraco.GraphQL.Adapters.Examine.Types;
 using Our.Umbraco.GraphQL.Adapters.PublishedContent.Types;
 using Our.Umbraco.GraphQL.Adapters.Types;
 using Our.Umbraco.GraphQL.Adapters.Types.Resolution;
@@ -32,9 +34,12 @@ namespace Our.Umbraco.GraphQL.Compose
             _typeRegistry.Add<Link, LinkGraphType>();
             _typeRegistry.Add<LinkType, LinkGraphType>();
             _typeRegistry.Add<JToken, JsonGraphType>();
+            _typeRegistry.Add<ISearchResults, SearchResultsInterfaceGraphType>();
+            _typeRegistry.Add<ISearchResult, SearchResultInterfaceGraphType>();
 
             _typeRegistry.Extend<Query, ExtendQueryWithUmbracoQuery>();
             _typeRegistry.Extend<UmbracoQuery, ExtendUmbracoQueryWithPublishedContentQuery>();
+            _typeRegistry.Extend<UmbracoQuery, ExtendUmbracoQueryWithExamineQuery>();
         }
 
         public void Terminate()

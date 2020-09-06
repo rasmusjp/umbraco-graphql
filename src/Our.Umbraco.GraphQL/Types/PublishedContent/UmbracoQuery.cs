@@ -9,6 +9,7 @@ namespace Our.Umbraco.GraphQL.Types.PublishedContent
     public class ExtendQueryWithUmbracoQuery
     {
         [NonNull]
+        [Description("Query various types of data from the Umbraco CMS")]
         public UmbracoQuery Umbraco([Inject] UmbracoQuery query) => query;
     }
 }

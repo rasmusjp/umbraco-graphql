@@ -28,15 +28,9 @@ namespace Our.Umbraco.GraphQL.Builders
 
             var schema = new Schema(_dependencyResolver);
 
-            var queryPropertyInfo = schemaType.GetProperty("Query");
-            if(queryPropertyInfo == null)
-                throw new ArgumentException($"Could not find property 'Query' on {schemaType}.", nameof(schemaType));
+            schema.Query = GenerateFromProperty(schemaType, "Query", true);
 
-            if(queryPropertyInfo.CanRead == false)
-                throw new ArgumentException("'Query' does not have a getter.", nameof(schemaType));
-            schema.Query = (IObjectGraphType) _graphTypeAdapter.Adapt(queryPropertyInfo.GetMethod.ReturnType.GetTypeInfo());
-
-            foreach(var type in additionalTypes)
+            foreach (var type in additionalTypes)
             {
                 schema.RegisterType(_graphTypeAdapter.Adapt(type));
             }
@@ -44,6 +38,24 @@ namespace Our.Umbraco.GraphQL.Builders
             _visitor?.Visit(schema);
 
             return schema;
+        }
+
+        private IObjectGraphType GenerateFromProperty(TypeInfo schemaType, string propertyName, bool throwError)
+        {
+            var queryPropertyInfo = schemaType.GetProperty(propertyName);
+            if (queryPropertyInfo == null)
+            {
+                if (throwError) throw new ArgumentException($"Could not find property 'Query' on {schemaType}.", nameof(schemaType));
+                return null;
+            }
+
+            if (queryPropertyInfo.CanRead == false)
+            {
+                if (throwError) throw new ArgumentException("'Query' does not have a getter.", nameof(schemaType));
+                return null;
+            }
+
+            return (IObjectGraphType)_graphTypeAdapter.Adapt(queryPropertyInfo.GetMethod.ReturnType.GetTypeInfo());
         }
     }
 }

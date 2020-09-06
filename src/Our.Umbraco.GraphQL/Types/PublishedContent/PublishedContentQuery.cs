@@ -33,6 +33,7 @@ namespace Our.Umbraco.GraphQL.Types.PublishedContent
     public class ExtendUmbracoQueryWithPublishedContentQuery
     {
         [NonNull]
+        [Description("Published content in Umbraco")]
         public PublishedContentQuery Content([Inject] PublishedContentQuery query) => query;
     }
 }

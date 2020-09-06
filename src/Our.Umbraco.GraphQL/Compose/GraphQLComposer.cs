@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 using Our.Umbraco.GraphQL.Adapters.PublishedContent.Visitors;
 using GraphQL.DataLoader;
 using Our.Umbraco.GraphQL.FieldMiddleware;
-using Our.Umbraco.GraphQL.Middleware;
+using Our.Umbraco.GraphQL.Adapters.Examine.Visitors;
 
 namespace Our.Umbraco.GraphQL.Compose
 {
@@ -29,7 +29,8 @@ namespace Our.Umbraco.GraphQL.Compose
             composition.Register<ISchemaBuilder, SchemaBuilder>(Lifetime.Scope);
 
             composition.GraphVisitors()
-                .Append<PublishedContentVisitor>();
+                .Append<PublishedContentVisitor>()
+                .Append<ExamineVisitor>();
 
             composition.FieldMiddlewares()
                 .Append<EnsureHttpContextFieldMiddleware>();
