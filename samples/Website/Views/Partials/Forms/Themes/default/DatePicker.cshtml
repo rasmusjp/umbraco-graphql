@@ -1,0 +1,36 @@
+@using System.Globalization
+@using Newtonsoft.Json
+@using Umbraco.Forms.Core
+@using Umbraco.Forms.Mvc
+@{
+    var datePickerYearRange = Configuration.GetSetting("DatePickerYearRange");
+    if (string.IsNullOrEmpty(datePickerYearRange))
+    {
+        datePickerYearRange = "10";
+    }
+
+    Html.AddFormThemeCssFile("~/App_Plugins/UmbracoForms/Assets/pikaday/pikaday.css");
+    Html.AddFormThemeScriptFile(null, "~/App_Plugins/UmbracoForms/Assets/moment/min/moment-with-locales.min.js");
+    Html.AddFormThemeScriptFile(null, "~/App_Plugins/UmbracoForms/Assets/pikaday/pikaday.js");
+    Html.AddFormThemeScriptFile(null, "~/App_Plugins/UmbracoForms/Assets/datepicker.init.js");
+
+    var locales = new
+    {
+        previousMonth = "<<",
+        nextMonth = ">>",
+        months = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames,
+        weekdays = CultureInfo.CurrentCulture.DateTimeFormat.DayNames,
+        weekdaysShort = CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedDayNames
+    };
+
+    //only render the script block below one time per page
+    var alreadyRendered = Context.Items.Contains("__formDatePickerRendered");
+    Context.Items["__formDatePickerRendered"] = true;
+}
+
+@if (!alreadyRendered)
+{
+    <script>
+        var umbracoFormsLocale = { name: '@CultureInfo.CurrentUICulture.Name', datePickerYearRange: '@datePickerYearRange', locales: @Html.Raw(JsonConvert.SerializeObject(locales)) };
+    </script>
+}

@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices.ComTypes;
+using System.Web;
 using GraphQL;
 using GraphQL.Resolvers;
 using GraphQL.Types;
@@ -11,13 +14,14 @@ using Umbraco.Core;
 using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Web;
+using Umbraco.Web.Routing;
 
 namespace Our.Umbraco.GraphQL.Adapters.PublishedContent.Types
 {
     public class PublishedPropertyFieldType : FieldType
     {
         public PublishedPropertyFieldType(IPublishedContentType contentType, PropertyType propertyType,
-            ITypeRegistry typeRegistry)
+            ITypeRegistry typeRegistry, IUmbracoContextFactory umbracoContextFactory, IPublishedRouter publishedRouter)
         {
             var publishedPropertyType = contentType.GetPropertyType(propertyType.Alias);
 
@@ -45,8 +49,28 @@ namespace Our.Umbraco.GraphQL.Adapters.PublishedContent.Types
             Name = publishedPropertyType.Alias.ToCamelCase();
             Description = propertyType.Description;
             Resolver = new FuncFieldResolver<IPublishedElement, object>(context =>
-                context.Source.Value(propertyType.Alias, context.GetArgument<string>("culture"),
-                    fallback: Fallback.ToLanguage));
+            {
+                object ResolveProperty() => context.Source.Value(propertyType.Alias, context.GetArgument<string>("culture"), fallback: Fallback.ToLanguage);
+                if (umbracoContextFactory == null || publishedRouter == null) return ResolveProperty();
+
+                var pc = context.Source as IPublishedContent;
+                var url = pc?.Url;
+                if (string.IsNullOrEmpty(url)) return ResolveProperty();
+
+                using (var ucRef = umbracoContextFactory.EnsureUmbracoContext())
+                {
+                    var uc = ucRef.UmbracoContext;
+
+                    if (uc.PublishedRequest?.PublishedContent?.Id != pc.Id)
+                    {
+                        var request = publishedRouter.CreateRequest(uc, new Uri(HttpContext.Current.Request.Url, url));
+                        uc.PublishedRequest = request;
+                        publishedRouter.PrepareRequest(request);
+                    }
+
+                    return ResolveProperty();
+                }
+            });
         }
     }
 }

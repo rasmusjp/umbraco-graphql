@@ -60,9 +60,16 @@ namespace Our.Umbraco.GraphQL.Adapters
             }
             else
             {
-                graphType = CreateGraphType(unwrappedTypeInfo,
-                    typeof(ObjectGraphType<>).MakeGenericType(unwrappedTypeInfo));
-                _visitor?.Visit((IObjectGraphType) graphType);
+                try
+                {
+                    graphType = CreateGraphType(unwrappedTypeInfo,
+                        typeof(ObjectGraphType<>).MakeGenericType(unwrappedTypeInfo));
+                    _visitor?.Visit((IObjectGraphType)graphType);
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
             }
 
             return Wrap(typeInfo, graphType);
@@ -260,6 +267,8 @@ namespace Our.Umbraco.GraphQL.Adapters
 
         private IGraphType CreateGraphType(TypeInfo typeInfo, Type graphTypeType)
         {
+            if (typeof(IGraphType).IsAssignableFrom(typeInfo)) return CreateGraphType(typeInfo);
+
             var graphType = (IGraphType) Activator.CreateInstance(graphTypeType);
             graphType.Description = typeInfo.GetCustomAttribute<DescriptionAttribute>()?.Description;
             graphType.DeprecationReason = typeInfo.GetCustomAttribute<DeprecatedAttribute>()?.DeprecationReason;
@@ -319,6 +328,24 @@ namespace Our.Umbraco.GraphQL.Adapters
                     break;
                 }
             }
+
+            return graphType;
+        }
+
+        private IGraphType CreateGraphType(TypeInfo typeInfo)
+        {
+            var constructor = typeInfo.GetConstructors().OrderBy(c => c.GetParameters()?.Length ?? 0).First();
+            var parms = constructor.GetParameters();
+            var args = new object[parms?.Length ?? 0];
+
+            for (var i = 0; i < args.Length; i++)
+            {
+                args[i] = _dependencyResolver.Resolve(parms[i].ParameterType);
+            }
+
+            var graphType = constructor.Invoke(args) as IGraphType;
+
+            _cache.Add(typeInfo, graphType);
 
             return graphType;
         }

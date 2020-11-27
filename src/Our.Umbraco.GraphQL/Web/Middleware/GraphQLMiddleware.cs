@@ -48,7 +48,7 @@ namespace Our.Umbraco.GraphQL.Web.Middleware
             try
             {
                 // TODO: Add ISchemaCacher
-                using (var schema = _schemaBuilder.Build(typeof(Schema<Query>).GetTypeInfo()))
+                using (var schema = _schemaBuilder.Build(typeof(Schema<Query, Mutation>).GetTypeInfo()))
                 {
                     var request = await _requestParser.Parse(context.Request);
                     switch (context.Request.Method)

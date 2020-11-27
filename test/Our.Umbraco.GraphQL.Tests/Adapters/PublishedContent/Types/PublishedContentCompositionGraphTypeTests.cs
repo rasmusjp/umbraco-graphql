@@ -7,6 +7,8 @@ using Our.Umbraco.GraphQL.Adapters.PublishedContent.Types;
 using Our.Umbraco.GraphQL.Adapters.Types.Resolution;
 using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
+using Umbraco.Web;
+using Umbraco.Web.Routing;
 using Xunit;
 using IdGraphType = Our.Umbraco.GraphQL.Adapters.Types.IdGraphType;
 
@@ -17,7 +19,7 @@ namespace Our.Umbraco.GraphQL.Tests.Adapters.PublishedContent.Types
         private PublishedContentCompositionGraphType CreateSUT(IContentTypeComposition contentType = null)
         {
             return new PublishedContentCompositionGraphType(contentType ?? Substitute.For<IContentTypeComposition>(),
-                Substitute.For<IPublishedContentType>(), new TypeRegistry());
+                Substitute.For<IPublishedContentType>(), new TypeRegistry(), Substitute.For<IUmbracoContextFactory>(), Substitute.For<IPublishedRouter>());
         }
 
         [Theory]

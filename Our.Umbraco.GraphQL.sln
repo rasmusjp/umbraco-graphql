@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2018
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{D56E0413-4D79-45DF-BECA-09D6732637F5}"
 EndProject
@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Our.Umbraco.GraphQL.Tests",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9B941129-D270-4DD7-A43E-CF2808BFDEE7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Our.Umbraco.GraphQL.Forms", "src\Our.Umbraco.GraphQL.Forms\Our.Umbraco.GraphQL.Forms.csproj", "{F4E59846-A044-439A-B074-9402FA5F474B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,8 +24,8 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C2001952-0774-4BFA-AF30-043B3B16D275}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C2001952-0774-4BFA-AF30-043B3B16D275}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2001952-0774-4BFA-AF30-043B3B16D275}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2001952-0774-4BFA-AF30-043B3B16D275}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59294783-3A17-479B-90C5-A3A2967176DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{59294783-3A17-479B-90C5-A3A2967176DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59294783-3A17-479B-90C5-A3A2967176DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -32,6 +34,10 @@ Global
 		{9CC632BF-46A8-4BA6-B51F-CDFF3A935974}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CC632BF-46A8-4BA6-B51F-CDFF3A935974}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CC632BF-46A8-4BA6-B51F-CDFF3A935974}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4E59846-A044-439A-B074-9402FA5F474B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4E59846-A044-439A-B074-9402FA5F474B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4E59846-A044-439A-B074-9402FA5F474B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4E59846-A044-439A-B074-9402FA5F474B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -40,6 +46,7 @@ Global
 		{C2001952-0774-4BFA-AF30-043B3B16D275} = {D56E0413-4D79-45DF-BECA-09D6732637F5}
 		{59294783-3A17-479B-90C5-A3A2967176DE} = {BE019E17-BF39-443C-8D62-74940D3B6560}
 		{9CC632BF-46A8-4BA6-B51F-CDFF3A935974} = {9B941129-D270-4DD7-A43E-CF2808BFDEE7}
+		{F4E59846-A044-439A-B074-9402FA5F474B} = {BE019E17-BF39-443C-8D62-74940D3B6560}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E20ED350-4522-4159-8FDC-A80A46E7DD7F}

@@ -465,6 +465,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Our.Umbraco.GraphQL.Forms\Our.Umbraco.GraphQL.Forms.csproj">
+      <Project>{f4e59846-a044-439a-b074-9402fa5f474b}</Project>
+      <Name>Our.Umbraco.GraphQL.Forms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Our.Umbraco.GraphQL\Our.Umbraco.GraphQL.csproj">
       <Project>{59294783-3a17-479b-90c5-a3a2967176de}</Project>
       <Name>Our.Umbraco.GraphQL</Name>

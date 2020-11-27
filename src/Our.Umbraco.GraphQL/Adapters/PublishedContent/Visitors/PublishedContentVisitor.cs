@@ -13,7 +13,9 @@ using Umbraco.Core;
 using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.Services;
+using Umbraco.Web;
 using Umbraco.Web.PublishedCache;
+using Umbraco.Web.Routing;
 
 namespace Our.Umbraco.GraphQL.Adapters.PublishedContent.Visitors
 {
@@ -23,12 +25,15 @@ namespace Our.Umbraco.GraphQL.Adapters.PublishedContent.Visitors
         private readonly IMediaTypeService _mediaTypeService;
         private readonly IPublishedContentTypeFactory _publishedContentTypeFactory;
         private readonly IPublishedSnapshotAccessor _publishedSnapshotAccessor;
+        private readonly IUmbracoContextFactory _umbracoContextFactory;
+        private readonly IPublishedRouter _publishedRouter;
         private readonly ITypeRegistry _typeRegistry;
         private readonly Lazy<IGraphTypeAdapter> _graphTypeAdapter;
         private readonly Lazy<IGraphVisitor> _visitor;
 
         public PublishedContentVisitor(IContentTypeService contentTypeService, IMediaTypeService mediaTypeService,
             IPublishedContentTypeFactory publishedContentTypeFactory, IPublishedSnapshotAccessor publishedSnapshotAccessor,
+            IUmbracoContextFactory umbracoContextFactory, IPublishedRouter publishedRouter,
             ITypeRegistry typeRegistry, Lazy<IGraphTypeAdapter> graphTypeAdapter, Lazy<IGraphVisitor> visitor)
         {
             _contentTypeService = contentTypeService ?? throw new ArgumentNullException(nameof(contentTypeService));
@@ -37,6 +42,8 @@ namespace Our.Umbraco.GraphQL.Adapters.PublishedContent.Visitors
                                            throw new ArgumentNullException(nameof(publishedContentTypeFactory));
             _publishedSnapshotAccessor = publishedSnapshotAccessor ??
                                          throw new ArgumentNullException(nameof(publishedSnapshotAccessor));
+            _umbracoContextFactory = umbracoContextFactory ?? throw new ArgumentNullException(nameof(umbracoContextFactory));
+            _publishedRouter = publishedRouter ?? throw new ArgumentNullException(nameof(publishedRouter));
             _typeRegistry = typeRegistry ?? throw new ArgumentNullException(nameof(typeRegistry));
             _graphTypeAdapter = graphTypeAdapter ?? throw new ArgumentNullException(nameof(graphTypeAdapter));
             _visitor = visitor ?? throw new ArgumentNullException(nameof(visitor));
@@ -62,7 +69,7 @@ namespace Our.Umbraco.GraphQL.Adapters.PublishedContent.Visitors
                 var publishedContentType = _publishedContentTypeFactory.CreateContentType(contentType);
 
                 var compositionGraphType =
-                    new PublishedContentCompositionGraphType(contentType, publishedContentType, _typeRegistry);
+                    new PublishedContentCompositionGraphType(contentType, publishedContentType, _typeRegistry, _umbracoContextFactory, _publishedRouter);
                 compositionGraphTypes.Add(contentType.Alias, compositionGraphType);
                 _visitor.Value.Visit(compositionGraphType);
                 schema.RegisterType(compositionGraphType);
@@ -79,7 +86,7 @@ namespace Our.Umbraco.GraphQL.Adapters.PublishedContent.Visitors
                 }
                 else
                 {
-                    graphType = new PublishedContentGraphType(contentType, publishedContentType, _typeRegistry);
+                    graphType = new PublishedContentGraphType(contentType, publishedContentType, _typeRegistry, _umbracoContextFactory, _publishedRouter);
                     foreach (var composition in contentType.ContentTypeComposition)
                     {
                         graphType.AddResolvedInterface(compositionGraphTypes[composition.Alias]);

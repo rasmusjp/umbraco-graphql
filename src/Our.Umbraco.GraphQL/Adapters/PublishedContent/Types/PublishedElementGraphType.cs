@@ -19,7 +19,7 @@ namespace Our.Umbraco.GraphQL.Adapters.PublishedContent.Types
             this.AddBuiltInFields();
 
             foreach (var propertyType in contentType.CompositionPropertyTypes)
-                base.AddField(new PublishedPropertyFieldType(publishedContentType, propertyType, typeRegistry));
+                base.AddField(new PublishedPropertyFieldType(publishedContentType, propertyType, typeRegistry, null, null));
         }
     }
 }

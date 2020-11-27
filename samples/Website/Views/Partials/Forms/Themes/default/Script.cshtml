@@ -1,0 +1,58 @@
+@inherits System.Web.Mvc.WebViewPage<Umbraco.Forms.Web.Models.FormViewModel>
+@using ClientDependency.Core.Mvc
+@using Newtonsoft.Json
+@using Umbraco.Forms.Mvc
+
+@{
+    var formJsObj = new
+    {
+        formId = Model.FormClientId,
+        fieldSetConditions = Model.FieldsetConditions,
+        fieldConditions = Model.FieldConditions,
+        recordValues = Model.GetFieldsNotDisplayed()
+    };
+
+    Html.AddFormThemeScriptFile(Model, "~/App_Plugins/UmbracoForms/Assets/Themes/Default/umbracoforms.js");
+}
+
+<script>
+    if (typeof umbracoFormsCollection === 'undefined') var umbracoFormsCollection = [];
+    umbracoFormsCollection.push('@Html.Raw(Uri.EscapeUriString(JsonConvert.SerializeObject(formJsObj)))');
+</script>
+
+@* Only render out scripts on the page if the form has not been submitted yet *@
+@if (Model.SubmitHandled == false)
+{
+    @*
+        If the current page of the form has any Partial view files attached to render
+        Likely used by events and third parties adding tracking or other 3rd party functionality to a form
+    *@
+    if (Model.CurrentPage.PartialViewFiles.Any())
+    {
+        foreach (var partial in Model.CurrentPage.PartialViewFiles)
+        {
+            @Html.Partial(partial.Value)
+        }
+    }
+
+
+    @* Render references to javascript files needed by fields on the current page*@
+    if (Model.UseClientDependency)
+    {
+        foreach (var script in Html.GetThemeScriptFiles(Model))
+        {
+            Html.RequiresJs(script.Value, Model.JavaScriptTagAttributes);
+        }
+        
+        foreach (var css in Html.GetThemeCssFiles(Model))
+        {
+            Html.RequiresCss(css.Value);
+        }
+    }
+    else
+    {
+        @Html.RenderFormsScripts(Url, Model, Model.JavaScriptTagAttributes)
+        @Html.RenderFormsStylesheets(Url, Model)
+    }
+    
+}

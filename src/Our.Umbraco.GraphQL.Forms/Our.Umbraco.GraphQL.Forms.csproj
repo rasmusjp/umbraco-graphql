@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <title>GraphQL for Umbraco Forms</title>
+        <authors>Benjamin Carleski, ProWorks</authors>
+        <owners>rasmusjp, Offroadcode</owners>
+        <description>Umbraco Forms queries and mutations for GraphQL</description>
+        <packageLicenseUrl></packageLicenseUrl>
+        <packageProjectUrl>https://github.com/rasmusjp/umbraco-graphql</packageProjectUrl>
+        <packageTags>umbraco umbracoforms graphql</packageTags>
+        <copyright>Copyright © 2020 ProWorks</copyright>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <versionPrefix>0.1.0</versionPrefix>
+    </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net472</TargetFramework>
+        <AssemblyName>Our.Umbraco.GraphQL.Forms</AssemblyName>
+        <RootNamespace>Our.Umbraco.GraphQL.Forms</RootNamespace>
+        <Company>ProWorks</Company>
+        <PackageLicenseExpression>https://github.com/rasmusjp/umbraco-graphql/raw/master/LICENSE</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/rasmusjp/umbraco-graphql</RepositoryUrl>
+    </PropertyGroup>
+    <ItemGroup>
+      <PackageReference Include="UmbracoForms.Core" Version="8.4.2" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Our.Umbraco.GraphQL\Our.Umbraco.GraphQL.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Reference Include="System.Web.ApplicationServices" />
+    </ItemGroup>
+</Project>

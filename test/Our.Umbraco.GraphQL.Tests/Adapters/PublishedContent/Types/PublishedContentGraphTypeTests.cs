@@ -11,6 +11,8 @@ using Our.Umbraco.GraphQL.Types;
 using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
+using Umbraco.Web;
+using Umbraco.Web.Routing;
 using Xunit;
 using IdGraphType = Our.Umbraco.GraphQL.Adapters.Types.IdGraphType;
 
@@ -22,7 +24,7 @@ namespace Our.Umbraco.GraphQL.Tests.Adapters.PublishedContent.Types
             IPublishedContentType publishedContentType = null)
         {
             return new PublishedContentGraphType(contentType ?? Substitute.For<IContentTypeComposition>(),
-                publishedContentType ?? Substitute.For<IPublishedContentType>(), new TypeRegistry());
+                publishedContentType ?? Substitute.For<IPublishedContentType>(), new TypeRegistry(), Substitute.For<IUmbracoContextFactory>(), Substitute.For<IPublishedRouter>());
         }
 
         [Theory]

@@ -1,0 +1,22 @@
+@model Umbraco.Forms.Mvc.Models.FieldViewModel
+
+@{
+    var isValid = (Model.Mandatory && Model.Values != null && Model.Values.Any()) || (!Model.Mandatory);
+}
+<input type="file" name="@Model.Name" id="@Model.Id" multiple
+       data-val="@(isValid == false ? "true" : null)"
+       data-val-required="@(isValid == false ? Model.RequiredErrorMessage : null)" />
+
+@if (Model.Values != null && Model.Values.Any())
+{
+    <p>
+        <strong>Current File/s:</strong><br />
+        @foreach (string filePath in Model.Values)
+        {
+            var fileName = filePath.Split('/').Last();
+
+            <a>@fileName</a><br />
+            <input type="hidden" name="@(Model.Name)_file_@(fileName)" value="@filePath" />
+        }
+    </p>
+}
